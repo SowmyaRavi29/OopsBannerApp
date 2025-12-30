@@ -5,29 +5,64 @@ package oopsBannerApp;
  */
 public class useCase1 {
 
-    public static void main(String[] args) {
-        String[] banner = getResult();
+    /* ================= INNER CLASS ================= */
+    static class CharacterPatternMap {
 
-        for (String pattern : banner) {
-            System.out.println(pattern);
+        private final char character;
+        private final String[] pattern;
+
+        /**
+         * Constructor to initialize character pattern data.
+         *
+         * @param character the character to be displayed
+         * @param pattern the banner pattern representing the character
+         */
+        public CharacterPatternMap(char character, String[] pattern) {
+            this.character = character;
+            this.pattern = pattern;
+        }
+
+        /**
+         * Returns the character.
+         *
+         * @return character value
+         */
+        public char getCharacter() {
+            return character;
+        }
+
+        /**
+         * Returns the banner pattern for the character.
+         *
+         * @return array of strings representing banner rows
+         */
+        public String[] getCharacterPattern() {
+            return pattern;
         }
     }
 
-    public static String[] getResult() {
-        String[] o = getOPattern();
-        String[] p = getPPattern();
-        String[] s = getSPattern();
+    /* ================= RENDER LOGIC ================= */
+    /**
+     * Renders the banner row by row.
+     *
+     * @param patterns array of CharacterPatternMap objects
+     */
+    public static void renderBanner(CharacterPatternMap[] patterns) {
 
-        String[] result = new String[7];
+        int height = patterns[0].getCharacterPattern().length;
 
-        for (int i = 0; i < 7; i++) {
-            result[i] = o[i] + "   " + o[i] + "    " + p[i] + "    " + s[i];
+        for (int row = 0; row < height; row++) {
+            String line = "";
+            for (CharacterPatternMap cp : patterns) {
+                line += cp.getCharacterPattern()[row] + "   ";
+            }
+            System.out.println(line);
         }
-        return result;
     }
 
-    public static String[] getOPattern() {
-        return new String[]{
+    /* ================= PATTERN DATA ================= */
+    public static CharacterPatternMap createOPattern() {
+        return new CharacterPatternMap('O', new String[]{
                 " ***** ",
                 "*     *",
                 "*     *",
@@ -35,30 +70,45 @@ public class useCase1 {
                 "*     *",
                 "*     *",
                 " ***** "
-        };
+        });
     }
 
-    public static String[] getPPattern() {
-        return new String[]{
+    public static CharacterPatternMap createPPattern() {
+        return new CharacterPatternMap('P', new String[]{
                 "******",
                 "*     *",
                 "*     *",
                 "******",
-                "*     ",
-                "*     ",
-                "*     "
-        };
+                "*",
+                "*",
+                "*"
+        });
     }
 
-    public static String[] getSPattern() {
-        return new String[]{
+    public static CharacterPatternMap createSPattern() {
+        return new CharacterPatternMap('S', new String[]{
                 "*****",
-                "*    ",
-                "*    ",
+                "*",
+                "*",
                 "*****",
                 "    *",
                 "    *",
                 "*****"
+        });
+    }
+
+
+
+    /* ================= MAIN METHOD ================= */
+    public static void main(String[] args) {
+
+        CharacterPatternMap[] bannerCharacters = {
+                createOPattern(),
+                createOPattern(),
+                createPPattern(),
+                createSPattern()
         };
+
+        renderBanner(bannerCharacters);
     }
 }
