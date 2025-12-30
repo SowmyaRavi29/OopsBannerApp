@@ -1,68 +1,29 @@
 package oopsBannerApp;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
+ * OOPS Banner App UseCase 5 - OOPS Banner Display Application
+ *
+ * Demonstrates pattern lookup using HashMap and
+ * efficient banner construction using StringBuilder.
+ *
  * @author arumu
- * @version
+ * @version 
  */
 public class useCase1 {
 
-    /* ================= INNER CLASS ================= */
-    static class CharacterPatternMap {
-
-        private final char character;
-        private final String[] pattern;
-
-        /**
-         * Constructor to initialize character pattern data.
-         *
-         * @param character the character to be displayed
-         * @param pattern the banner pattern representing the character
-         */
-        public CharacterPatternMap(char character, String[] pattern) {
-            this.character = character;
-            this.pattern = pattern;
-        }
-
-        /**
-         * Returns the character.
-         *
-         * @return character value
-         */
-        public char getCharacter() {
-            return character;
-        }
-
-        /**
-         * Returns the banner pattern for the character.
-         *
-         * @return array of strings representing banner rows
-         */
-        public String[] getCharacterPattern() {
-            return pattern;
-        }
-    }
-
-    /* ================= RENDER LOGIC ================= */
     /**
-     * Renders the banner row by row.
+     * Builds and returns a map of character patterns.
      *
-     * @param patterns array of CharacterPatternMap objects
+     * @return Map containing character as key and banner pattern as value
      */
-    public static void renderBanner(CharacterPatternMap[] patterns) {
+    public static Map<Character, String[]> buildCharacterPatternMap() {
 
-        int height = patterns[0].getCharacterPattern().length;
+        Map<Character, String[]> patternMap = new HashMap<>();
 
-        for (int row = 0; row < height; row++) {
-            String line = "";
-            for (CharacterPatternMap cp : patterns) {
-                line += cp.getCharacterPattern()[row] + "   ";
-            }
-            System.out.println(line);
-        }
-    }
-
-    /* ================= PATTERN DATA ================= */
-    public static CharacterPatternMap createOPattern() {
-        return new CharacterPatternMap('O', new String[]{
+        patternMap.put('O', new String[]{
                 " ***** ",
                 "*     *",
                 "*     *",
@@ -71,44 +32,53 @@ public class useCase1 {
                 "*     *",
                 " ***** "
         });
-    }
 
-    public static CharacterPatternMap createPPattern() {
-        return new CharacterPatternMap('P', new String[]{
-                "******",
+        patternMap.put('P', new String[]{
+                "****** ",
                 "*     *",
                 "*     *",
-                "******",
-                "*",
-                "*",
-                "*"
+                "****** ",
+                "*      ",
+                "*      ",
+                "*      "
         });
+
+        patternMap.put('S', new String[]{
+                "***** ",
+                "*     ",
+                "*     ",
+                "***** ",
+                "     *",
+                "     *",
+                "***** "
+        });
+
+        return patternMap;
     }
 
-    public static CharacterPatternMap createSPattern() {
-        return new CharacterPatternMap('S', new String[]{
-                "*****",
-                "*",
-                "*",
-                "*****",
-                "    *",
-                "    *",
-                "*****"
-        });
+    /**
+     * Renders the banner by composing patterns row by row.
+     *
+     * @param word the word to be displayed
+     * @param patternMap map of character patterns
+     */
+    public static void renderBanner(String word, Map<Character, String[]> patternMap) {
+
+        int height = patternMap.values().iterator().next().length;
+
+        for (int row = 0; row < height; row++) {
+            StringBuilder line = new StringBuilder();
+
+            for (char ch : word.toCharArray()) {
+                line.append(patternMap.get(ch)[row]).append("   ");
+            }
+
+            System.out.println(line.toString());
+        }
     }
 
-
-
-    /* ================= MAIN METHOD ================= */
     public static void main(String[] args) {
-
-        CharacterPatternMap[] bannerCharacters = {
-                createOPattern(),
-                createOPattern(),
-                createPPattern(),
-                createSPattern()
-        };
-
-        renderBanner(bannerCharacters);
+        Map<Character, String[]> characterPatterns = buildCharacterPatternMap();
+        renderBanner("OOPS", characterPatterns);
     }
 }
